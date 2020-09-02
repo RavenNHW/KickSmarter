@@ -1,6 +1,5 @@
 # Kickstart Informed
 #### Create successful projects with machine learning
----
 
 Project by Raven Welch | [LinkedIn](https://www.linkedin.com/) | [Email](mailto:ravennhwelch@gmail.com) | [Medium](https://medium.com/@ravenwelch)
 
@@ -32,7 +31,6 @@ Project by Raven Welch | [LinkedIn](https://www.linkedin.com/) | [Email](mailto:
 ```
 
 ## Sources
---- 
 
 The data was collected by [webrobots.io](https://webrobots.io/kickstarter-datasets/) (2020-07-16), scraped from [Kickstarter](https://www.kickstarter.com/)
 
@@ -41,7 +39,6 @@ All icons used are created by [Font Awewsome Icons](https://fontawesome.com/lice
 The template used for the presentation was created by [Slides Carnival](https://www.slidescarnival.com/) and modified by myself
 
 ## Overview
----
 
 ### What is Kickstarter?
 
@@ -102,7 +99,6 @@ However, for those who have their project declared as 'unlikely to succeed' by t
 As always, with the 73% accuracy the project creator must keep risk in mind as well.
 
 ## Limitations & Next Steps
----
 
 ### Limitations
 
@@ -128,7 +124,6 @@ The next steps to take, but not limited to, are the following:
 - Test other algorithms, such as XGBoost, and research to see if there are others that may perform better
 
 ## Reproduction
----
 
 Run the [executive notebook]('Executive_Notebook.ipynb) recreate the modeling process. However, this does not include items such as the [Google Cloud gridsearch]('data_processing/GridSearch_CLOUD.ipynb') as it is not fit to be run on a regular computer.
 
