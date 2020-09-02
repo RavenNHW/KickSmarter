@@ -5,7 +5,7 @@
 Project by Raven Welch | [LinkedIn](https://www.linkedin.com/) | [Email](mailto:ravennhwelch@gmail.com) | [Medium](https://medium.com/@ravenwelch)
 
 ### ReadMe Navigation
-Sources | Overview | Next Steps | Reproduction
+[Sources](#Sources) | [Overview](#overview) | [Next Steps & Limitations](#next-steps--limitations) | [Reproduction](#reproduction)
 
 ### Repo Navigation
 ```
