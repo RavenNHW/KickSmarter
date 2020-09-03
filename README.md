@@ -115,16 +115,16 @@ Unfortunately, the model does not cover a variety of important factors.
 
 The next steps to take, but not limited to, are the following: 
 
-- Creating an algorithm to analyze blurb data and titles to analyze whether or not the words used may draw more attention, and therefore, more backers. 
-
 - Test creating models for each parent category, using sub-categories as a feature.
 
 - Further refine models, and experimenting with using less features to increase accuracy.
 
 - Test other algorithms, such as XGBoost, and research to see if there are others that may perform better
 
+- Creating an algorithm to analyze blurb data and titles to see whether or not the words used may draw more attention, and therefore, more backers. 
+
 ## Reproduction
 
-Run the [executive notebook]('Executive_Notebook.ipynb) recreate the modeling process. However, this does not include items such as the [Google Cloud gridsearch]('data_processing/GridSearch_CLOUD.ipynb') as it is not fit to be run on a regular computer.
+Run the [executive notebook](Executive_Notebook.ipynb) recreate the modeling process. However, this does not include items such as the [Google Cloud gridsearch]('data_processing/GridSearch_CLOUD.ipynb') as it is not fit to be run on a regular computer.
 
 If you would like to review the data cleaning process, unzip [the raw CSVs]('data_processing/data/Kickstarter_CSVs.zip) if you have not already and run the [data cleaning notebook]('data_processing/DataCleaningBook.ipynb'). 
