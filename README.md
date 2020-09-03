@@ -130,4 +130,4 @@ The next steps to take, but not limited to, are the following:
 
 Run the [executive notebook](Executive_Notebook.ipynb) recreate the modeling process. However, this does not include items such as the [Google Cloud gridsearch]('data_processing/GridSearch_CLOUD.ipynb') as it is not fit to be run on a regular computer.
 
-If you would like to review the data cleaning process, unzip [the raw CSVs]('data_processing/data/Kickstarter_CSVs.zip) if you have not already and run the [data cleaning notebook]('data_processing/DataCleaningBook.ipynb'). 
+If you would like to review the data cleaning process, download and unzip [the raw CSVs](https://drive.google.com/file/d/1R95VR0kpbABkCy8f_CO5pJPikeaudo2H/view?usp=sharing) if you have not already and run the [data cleaning notebook]('data_processing/DataCleaningBook.ipynb'). 
