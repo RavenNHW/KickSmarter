@@ -48,6 +48,47 @@ Output:
     
     return X_train, y_train, X_test, y_test
 
+def plot_violin(fig, y, label, line_color = 'black', line_width = 1, fillcolor = 'red', opacity = .6):
+    
+    """Adds a single violin plot trace to an already plotly figure.
+-----------------------------------------
+Input:
+    fig: plotly.graph_objs._figure.Figure
+    The target figure for the violin plot to be added to
+    
+    y: pandas Series object
+    Sets the y sample data or coordinates. See plotly documentation for more information
+    
+    label: str
+    Sets the trace name
+    
+    line_color: str, default = 'black'
+    The color for the trace lines. Can be a valid CSS color name, hex, RGB(A), HSL(A)
+    
+    line_width: int, default = 1
+    The width for the trace lines
+    
+    fillcolor: str, default = 'red'
+    The color for the trace lines. Can be a valid CSS color name, hex, RGB(A), HSL(A)
+    
+    opacity: str or float, default = .6
+    The opacity of the trace, between 1 and 0
+    
+-----------------------------------------
+Output: 
+    returns plotly.graph_objs._figure.Figure object
+    """
+    
+    return fig.add_trace(go.Violin(
+        y=y, 
+        name = label,
+        box_visible=True,
+        meanline_visible=True,
+        line_color= line_color,
+        line_width = line_width,
+        fillcolor=fillcolor,
+        opacity=opacity))
+
 def plot_model_results(results, model_names, filepath, figure_title, figsize = (10, 8)):
     
     """Plots and saves an image of the plot.
