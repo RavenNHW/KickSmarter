@@ -16,8 +16,6 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import precision_score
 import matplotlib.pyplot as plt
 
-seed = 6
-
 def load_train_test_data(ex = False):
     
     """Loads the traning and test data to be used alongside modeling. Separates it into X(features) and y(targets) for both train and test. 
@@ -91,6 +89,28 @@ Output:
         line_width = line_width,
         fillcolor=fillcolor,
         opacity=opacity))
+
+def save_cv_results(results, fig, filename):
+    """Saves the results from cross-validation model testing
+-----------------------------------------
+Input:
+    results: dict
+    Dictionary of model results obtained from test_models()
+    
+    fig: plotly.graph_objs._figure.Figure
+    Figure plotting the results of the cross-validation testing
+
+    filename: str
+    Name of the files, preferably in the format of [TESTTYPE]Results_[test_num]
+-----------------------------------------
+Output:
+    Saves a PNG of the plotly fig, and pickles the dict object 
+"""
+    
+    ext = ['pkl', 'png']
+
+    pickle.dump(results,open(f'data_processing/models/CV_Results/{filename}.{ext[0]}', 'wb'))
+    fig.write_image(f'data_processing/models/CV_Results/{filename}.{ext[1]}')
 
 def plot_cv_results(data):
     """Plots the model cross-validation results.
@@ -216,7 +236,7 @@ Output:
                                  error_score = 'raise')
         results.append(scores)
         model_names.append(model)
-    vanilla_dict = {i:y for i,y in zip(model_names, results)}
+    results_dict = {i:y for i,y in zip(model_names, results)}
    
     return results_dict
 
@@ -312,3 +332,19 @@ Best Parameters:
 """)
     
     return clf
+
+seed = 6
+
+models = {'LogReg': LogisticRegression(),
+          'KNN': KNeighborsClassifier(),
+          'DT': DecisionTreeClassifier(random_state = seed), 
+          'GaussianNB': GaussianNB(),
+          'MultinomailNB': MultinomialNB(),
+          'LDA': LinearDiscriminantAnalysis(),
+          'LinearSVC': LinearSVC(max_iter = 1250, random_state = seed),
+          'SGD': SGDClassifier(random_state = seed),  
+          'ADA': AdaBoostClassifier(random_state = seed),
+          'Bagging': BaggingClassifier(random_state = seed), 
+          'Ridge': RidgeClassifier(random_state = seed),
+          'RF': RandomForestClassifier(random_state = seed),
+          'GradientBoost' : GradientBoostingClassifier(random_state = seed)}
