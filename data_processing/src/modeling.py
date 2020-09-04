@@ -16,6 +16,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import precision_score
 import matplotlib.pyplot as plt
 
+seed = 6
+
 def load_train_test_data(ex = False):
     
     """Loads the traning and test data to be used alongside modeling. Separates it into X(features) and y(targets) for both train and test. 
@@ -132,6 +134,30 @@ Output:
     )
     
     return fig
+
+def get_models(model_names):
+    """Retrieve the models desired from the dictionary of models
+-----------------------------------------
+Input: 
+    model_names: list or set
+    The names of the models to be retrieved. Must be a key within the models dict object
+-----------------------------------------
+Output:
+    model_dict: dict
+    Dictionary containing the models to be used
+    """
+    if type(model_names) == list:
+        model_names = set(model_names)
+        
+    elif type(model_names) == set:
+        pass
+    
+    else:
+        raise TypeError("'model_names' must be a list or set")
+        
+    model_dict = {key:models[key] for key in set(model_names) & set(models)}
+    
+    return model_dict
 
 def plot_model_results(results, model_names, filepath, figure_title, figsize = (10, 8)):
     
