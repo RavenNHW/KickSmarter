@@ -216,7 +216,7 @@ Output:
                                  error_score = 'raise')
         results.append(scores)
         model_names.append(model)
-    vanilla_dict = {i:y for i,y in zip(model_names, results)}
+    results_dict = {i:y for i,y in zip(model_names, results)}
    
     return results_dict
 
