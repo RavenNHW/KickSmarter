@@ -2,6 +2,7 @@ import os
 import pickle
 import pandas as pd
 from tqdm import tqdm
+import plotly.graph_objects as go
 
 from sklearn.model_selection import RepeatedStratifiedKFold, cross_val_score, GridSearchCV, RandomizedSearchCV
 from sklearn.linear_model import SGDClassifier, RidgeClassifier, LogisticRegression
@@ -88,6 +89,49 @@ Output:
         line_width = line_width,
         fillcolor=fillcolor,
         opacity=opacity))
+
+def plot_cv_results(data):
+    """Plots the model cross-validation results.
+-----------------------------------------
+Input:
+    data: pandas Dataframe or dict object
+-----------------------------------------
+Output:
+    fig: plotly.graph_objs._figure.Figure
+    Returns the figure object
+    """
+    
+    if type(data) == pd.core.frame.DataFrame:
+        dataframe = data
+        
+    elif type(data) == dict:
+        dataframe = pd.DataFrame.from_dict(data)
+        
+    else:
+        raise ValueError("Data must be in dataframe or dict format")
+        
+    
+    fig = go.Figure()
+    model_count = 0
+
+    for i in dataframe: 
+        plot_violin(fig,dataframe[i], i)
+        model_count += 1
+
+    fig.update_layout(
+        title = dict(
+            text = f"Cross validation precision Scores for {model_count} models",
+            xanchor = 'center', x = .5),
+
+        yaxis_zeroline = False, 
+        height = 500, 
+        showlegend = False, 
+        yaxis_title = "Precision Score",
+        xaxis_title = "Models"
+        
+    )
+    
+    return fig
 
 def plot_model_results(results, model_names, filepath, figure_title, figsize = (10, 8)):
     
