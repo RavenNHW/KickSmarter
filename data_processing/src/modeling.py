@@ -3,6 +3,7 @@ import pickle
 import pandas as pd
 from tqdm import tqdm
 import plotly.graph_objects as go
+from datetime import datetime
 
 from sklearn.model_selection import RepeatedStratifiedKFold, cross_val_score, GridSearchCV, RandomizedSearchCV
 from sklearn.linear_model import SGDClassifier, RidgeClassifier, LogisticRegression
@@ -15,8 +16,6 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import precision_score
 import matplotlib.pyplot as plt
-
-seed = 6
 
 def load_train_test_data(ex = False):
     
@@ -51,6 +50,80 @@ Output:
     
     return X_train, y_train, X_test, y_test
 
+def run_cv(model_names, X_train, y_train, save_results = True, filename = None):
+    
+    """A function that runs the get_models, test_models, and plot_cv_results functions. "All in one" function for cleaner code.
+While saving the results is optional, it is on by default. If you do not select a filename then the default is set to datemonthyear_hour.minute
+-----------------------------------------
+Input:
+    model_names: list or set
+    A list or set of strings matching keys from the 'models' dictionary. Used to select the models to be tested
+    
+    X_train: pandas DataFrame
+    The features from the dataset used for training 
+    
+    y_train: pandas Series
+    The targets from the dataset used for training
+    
+    save_results: bool, default = True
+    Whether or not you would like to save the results to the data_processing/models/CV_Results folder. 
+    
+    filename: str, default = None
+    If 'None', is set to current date and time. The name of the model results files. 
+"""
+    
+    models = get_models(model_names)
+
+    results_dict = test_models(X_train, y_train, models)
+
+    fig = plot_cv_results(results_dict)
+    
+    if save_results == True:
+        if filename == None:
+            filename = datetime.now().strftime("%d%m%Y_%H.%M")
+        
+        save_cv_results(results_dict, fig, filename)
+    
+    return fig.show() 
+    
+def load_cv(model_names, save_results = True, filename = None):
+    
+    """A function that pulls the information from run_cv, and runs the plot_cv_results and save_cv_results functions. "All in one" function for cleaner code.
+While saving the results is optional, it is on by default. If you do not select a filename then the default is set to datemonthyear_hour.minute
+-----------------------------------------
+Input:
+    model_names: list or set
+    A list or set of strings matching keys from the 'models' dictionary. Used to select the models to be tested
+    
+    save_results: bool, default = True
+    Whether or not you would like to save the results to the data_processing/models/CV_Results folder. 
+    
+    filename: str, default = None
+    If 'None', is set to current date and time. The name of the model results files. 
+"""
+    
+    if type(model_names) == list:
+        model_names = set(model_names)
+        
+    elif type(model_names) == set:
+        pass
+    
+    else:
+        raise TypeError("'model_names' must be a list or set")
+        
+    og_results_dict = pickle.load(open('data_processing/models/CV_Results/VanillaResults_1.pkl', 'rb'))
+    results_dict = {key:og_results_dict[key] for key in set(model_names) & set(og_results_dict)}
+    
+    fig = plot_cv_results(results_dict)
+    
+    if save_results == True:
+        if filename == None:
+            filename = datetime.now().strftime("%d%m%Y_%H.%M")
+        
+        save_cv_results(results_dict, fig, filename)
+        
+    return fig.show()
+    
 def plot_violin(fig, y, label, line_color = 'black', line_width = 1, fillcolor = 'red', opacity = .6):
     
     """Adds a single violin plot trace to an already plotly figure.
@@ -91,6 +164,28 @@ Output:
         line_width = line_width,
         fillcolor=fillcolor,
         opacity=opacity))
+
+def save_cv_results(results, fig, filename):
+    """Saves the results from cross-validation model testing
+-----------------------------------------
+Input:
+    results: dict
+    Dictionary of model results obtained from test_models()
+    
+    fig: plotly.graph_objs._figure.Figure
+    Figure plotting the results of the cross-validation testing
+
+    filename: str
+    Name of the files, preferably in the format of [TESTTYPE]Results_[test_num]
+-----------------------------------------
+Output:
+    Saves a PNG of the plotly fig, and pickles the dict object 
+"""
+    
+    ext = ['pkl', 'png']
+
+    pickle.dump(results,open(f'data_processing/models/CV_Results/{filename}.{ext[0]}', 'wb'))
+    fig.write_image(f'data_processing/models/CV_Results/{filename}.{ext[1]}')
 
 def plot_cv_results(data):
     """Plots the model cross-validation results.
@@ -159,32 +254,6 @@ Output:
     
     return model_dict
 
-def plot_model_results(results, model_names, filepath, figure_title, figsize = (10, 8)):
-    
-    """Plots and saves an image of the plot.
------------------------------------------
-Input:
-    results: list
-    the results of the models, gained from test_models()
-    
-    model_names: list
-    the names of models used, gained from test_models()
-    
-    filepath: str
-    the filepath for the graph image to be saved to
-
------------------------------------------
-Output:
-    plt.show()
-    """
-    
-    plt.figure(figsize = figsize)
-    plt.boxplot(results, labels = model_names, showmeans = True)
-    plt.title(f'{figure_title}')
-    plt.ylabel('Accuracy'); plt.xlabel('Model')
-    plt.savefig(filepath)
-    return plt.show()
-
 def test_models(x_train, y_train, models, n_jobs = 2):
     """Test all models given using RepeatedStratifiedKFold. 
 -----------------------------------------
@@ -240,24 +309,6 @@ Output:
     
     return models
 
-
-def save_cv_results(model_dict, filename):
-    """Pickles the model's results
------------------------------------------
-Input: 
-    model_dict: Dict
-    The results from test_models()
-    
-    filename: str
-    path to the target directory for the file to be saved
-
------------------------------------------
-Output:
-    Pickles the given dictionary object"""
-    
-    pickle.dump(model_dict, open(filename, 'wb'))
-    return 'Pickling Complete'
-
 def run_gridsearch(classifier, X_train, y_train, X_test, y_test, params, n_jobs = 2, verbose = 0):
     
     """A function for performing a grid search on a given model.
@@ -312,3 +363,19 @@ Best Parameters:
 """)
     
     return clf
+
+seed = 6
+
+models = {'LogReg': LogisticRegression(),
+          'KNN': KNeighborsClassifier(),
+          'DT': DecisionTreeClassifier(random_state = seed), 
+          'Gaussian': GaussianNB(),
+          'Multinomial': MultinomialNB(),
+          'LDA': LinearDiscriminantAnalysis(),
+          'LinearSVC': LinearSVC(max_iter = 1250, random_state = seed),
+          'SGD': SGDClassifier(random_state = seed),  
+          'ADA': AdaBoostClassifier(random_state = seed),
+          'Bagging': BaggingClassifier(random_state = seed), 
+          'Ridge': RidgeClassifier(random_state = seed),
+          'RF': RandomForestClassifier(random_state = seed),
+          'GradientBoost' : GradientBoostingClassifier(random_state = seed)}
