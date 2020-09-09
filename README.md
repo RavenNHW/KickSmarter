@@ -1,4 +1,4 @@
-# Kickstart Informed
+# KickSmarter
 #### Create successful projects with machine learning
 
 Project by Raven Welch | [LinkedIn](https://www.linkedin.com/) | [Email](mailto:ravennhwelch@gmail.com) | [Medium](https://medium.com/@ravenwelch)
